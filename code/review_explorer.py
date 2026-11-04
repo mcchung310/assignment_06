@@ -129,8 +129,10 @@ from reviews import (
 reviews_file = os.environ.get("REVIEWS_FILE", REVIEWS_FILE)
 
 st.title("Salt City Coffee — What Customers Are Saying")
-st.markdown("Every customer review, broken into the things people talk about. "
-            "Filter by location or subject, or ask a question at the bottom of the page.")
+st.markdown(
+    "Every customer review, broken into the things people talk about. "
+    "Filter by location or subject, or ask a question at the bottom of the page."
+)
 
 mentions = analyze_reviews(reviews_file)
 
@@ -162,8 +164,9 @@ praised_tab.dataframe(praised, hide_index=True)
 complained = summary[summary["net"] < 0].sort_values("net").head(5)
 complained_tab.dataframe(complained, hide_index=True)
 
-said_tab.dataframe(selected[["date", "location", "item", "subject", "mention_sentiment",
-                             "assessments", "sentence_text"]], hide_index=True)
+said_columns = ["date", "location", "item", "subject", "mention_sentiment",
+                "assessments", "sentence_text"]
+said_tab.dataframe(selected[said_columns], hide_index=True)
 
 st.subheader("Ask the reviews")
 question = st.text_input("Your question", key="question",

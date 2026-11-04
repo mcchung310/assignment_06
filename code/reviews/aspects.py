@@ -103,7 +103,7 @@ def item_name(mention: str, aliases: dict) -> str:
         item_name("Parking downtown", aliases)  ->  "parking"
         item_name("Mocha Latte", aliases)        ->  "mocha latte"   # not an alias
     """
-    lowered = mention.lower()
+    lowered = mention.strip().lower()
     return aliases.get(lowered, lowered)
 
 
@@ -136,6 +136,7 @@ def build_mentions(reviews: pd.DataFrame, sentences: pd.DataFrame,
                "subject", "mention_sentiment", "assessments", "sentence_text",
                "source", "subject_confidence"]
     return table[columns].reset_index(drop=True)
+
 
 def analyze_reviews(reviews_file: str) -> pd.DataFrame:
     """The whole pipeline for one reviews file: raw CSV in, `mentions` out.
@@ -337,6 +338,7 @@ def build_messages(question: str, evidence: pd.DataFrame, limit: int = 20) -> li
         {"role": "system", "content": SYSTEM_PROMPT},
         {"role": "user", "content": "\n".join(lines)},
     ]
+
 
 def answer_question(question: str, mentions: pd.DataFrame, aliases: dict):
     """What a question is about and the evidence for it: (scope, evidence)."""
