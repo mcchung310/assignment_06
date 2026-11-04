@@ -192,5 +192,25 @@ def subjects_step(reviews: pd.DataFrame, mentions: pd.DataFrame,
     cache when the request is exactly the same, so the same reviews must
     produce the same list every time.
     """
-    # TODO: your code here
-    pass
+    if os.path.exists(cache_file):
+        return pd.read_csv(cache_file)
+
+    rows = []
+    for review in reviews.to_dict("records"):
+        found = mentions[mentions["review_id"] == review["review_id"]]
+        if found.empty:
+            continue
+        names = list(found.sort_values("mention_offset")["mention"].drop_duplicates())
+        answers = classify_mentions(review["text"], names)["answers"]
+        for name in names:
+            rows.append({
+                "review_id": review["review_id"],
+                "mention": name,
+                "subject": answers[name]["choice"],
+                "subject_confidence": answers[name]["confidence"],
+            })
+
+    table = pd.DataFrame(rows, columns=["review_id", "mention", "subject",
+                                        "subject_confidence"])
+    table.to_csv(cache_file, index=False)
+    return table
