@@ -5,3 +5,19 @@ terminology from this assignment (REST API, endpoint, HTTP status code,
 raise_for_status, API key, form data vs. JSON body, rate limit, caching,
 json_normalize, record_path, meta, grain, opinion mining, named-entity
 recognition, prompt, system prompt, reasoning model), and make it actionable.
+
+For this assigment, I learned a couple new things. First, - How a REST API call 
+actually works, step by step: build the URL from BASE_URL and the endpoint path, 
+send my API key in the X-API-KEY header, call raise_for_status(), then read 
+response.json(). I didn't really get why raise_for_status() mattered until I saw 
+that without it, a 401 or 404 comes back as a normal-looking dict and the code 
+breaks later with a KeyError somewhere else.
+
+Where I struggled was with item_name because I lowercased the mention but didn't
+strip whitespace, so " wifi " didn't match "wifi". Small cleaning steps
+like .strip() are steps that I easliy forget but they are important to match names. 
+
+For the future and my tentative final project idea, I would want to try the same 
+kind of pipeline, like YouTube comments on my Loud & Clear videos, to see what 
+people mention about the artists, the sound, and the production, and practice 
+caching and json_normalize on JSON I haven't seen before.
